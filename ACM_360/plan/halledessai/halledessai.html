@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<title>Plan Halle d'Essai</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="robots" content="noindex, nofollow">
+		<link rel="stylesheet" href="../include/css/style_plan.css">
+		<link rel="stylesheet" href="../include/font-awesome-4.7.0/css/font-awesome.min.css">
+	</head>
+	<body>
+
+		<script src="../include/js/three.js"></script>
+		<script src="../include/js/GLTFLoader.js"></script>
+		<script src="../include/js/MTLLoader.js"></script>
+		<script src="../include/js/DDSLoader.js"></script>
+		<script src="../include/js/TweenMax.min.js"></script>
+		<script src="../include/js/jquery-3.3.1.min.js"></script>
+		<script src="../include/js/TrackballControls.js"></script>
+		<script>
+
+
+console.clear();
+
+//creation de la scene 3D
+var scene = new THREE.Scene();
+
+//gestion camera
+var camera = new THREE.PerspectiveCamera( -280, window.innerWidth / window.innerHeight, 0.001, 1000 );
+camera.position.set( 28, 49, 0 );
+
+scene.add(camera);
+
+//creation du canvas et insertion dans le dom
+var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize( window.innerWidth, window.innerHeight );
+document.body.appendChild( renderer.domElement);
+renderer.domElement.style.position = 'absolute';
+
+
+//creation de la scene
+function render() {
+  renderer.render(scene, camera);
+}
+TweenLite.ticker.addEventListener('tick', render );
+
+
+////////////////////////////////////////
+
+//gestion de la lumière
+var object3d	= new THREE.DirectionalLight('white', 2);
+object3d.position.set(2,5,4);
+object3d.name	= 'Back light';
+scene.add(object3d);
+var object3d2	= new THREE.DirectionalLight('white', 1);
+object3d2.position.set(8,3,-10);
+object3d2.name	= 'light';
+scene.add(object3d2);
+var object3d3	= new THREE.DirectionalLight('white', 1);
+object3d3.position.set(-5,-3,8);
+object3d3.name	= 'light2';
+scene.add(object3d3);
+scene.background = new THREE.Color( 0xb2b2b2 );
+
+	// creation et insertion du loader
+	var loader = new THREE.GLTFLoader();
+
+	// insertion de la ressource.GLTF
+	loader.load(
+		// URL
+		'obj/essai.gltf',
+		// appel de la fonction au chargement de l'objet
+		function ( gltf ) {
+
+			scene.add( gltf.scene );
+
+			gltf.animations; 
+			gltf.scene; 
+			gltf.scenes; 
+			gltf.cameras; 
+
+		},
+		// progression du chargement dans la console.
+		function ( xhr ) {
+
+			console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+		},
+		// Erreur
+		function ( error ) {
+
+			console.log( 'An error happened' );
+
+		}
+	);
+			
+
+//controle de l'objet///////////////////
+
+var controls = new THREE.TrackballControls( camera );
+
+controls.rotateSpeed = 3.6;
+controls.zoomSpeed = 0.8;
+controls.panSpeed = 1;
+
+controls.noZoom = false;
+controls.noPan = false;
+
+controls.staticMoving = false;
+controls.dynamicDampingFactor = 0.2;
+
+controls.enabled = true;
+TweenLite.ticker.addEventListener("tick", controls.update );
+
+
+		</script>
+		<div class="info">i</div>
+		<div class="infodiv"> 	
+		<span id="btn_close" class="fa fa-times"></span>
+			<ul class="infoliste">
+				<li><h2>Halle d'Essai</h2></li>
+				<li>460m², 13m x 26m utiles au sol, 12m sous plafond <br> <br> Equipement: <br>un carré + croix de St Christophe de 9 mètres de côté, <br>un pont de face de 9 mètres de long</li>
+				<li><img id="img1plan" class="class1" alt="plan vu dessus" src="img/essai_dessus.jpg"><img alt="plan vu de coté" src="img/essai-34.jpg" id="img2plan" class="class2"></li>
+				<li> <a href="../03/halledessai.html" target=_blank> Vue 360° </a></li>
+				<li>
+					<a href="halledessai460m2.pdf" target=_blank>Fiche descriptive</a>
+				</li>
+			</ul>
+		
+		</div>
+		<script>
+		//function ouverture info
+			$(".infodiv").hide();
+			$("#btn_close").hide()
+			$(".info").click(function(){
+				$(".infodiv").show();
+				$("#btn_close").show();
+				$(".info").hide();
+			})
+			
+			
+			//function aggrandissement image au clic
+			
+			var classImg = $('#img1plan').attr("class");
+			
+			$("#img1plan").click(function() {
+				var classImg = $('#img1plan').attr("class");
+				if (classImg == 'class1'){
+					$(this).css({width:'800px', transition:'0.5s'}).addClass('class3').removeClass('class1');
+				}else{
+					$(this).css({width:'100px', transition:'0.5s'}).addClass('class1').removeClass('class3');
+				}
+			});		
+			
+			var classImg2 = $('#img2plan').attr("class");
+			
+			$("#img2plan").click(function() {
+				var classImg2 = $('#img2plan').attr("class");
+				if (classImg2 == 'class2'){
+					$(this).css({width:'800px', transition:'0.5s'}).addClass('class3').removeClass('class2');
+				}else{
+					$(this).css({width:'100px', transition:'0.5s'}).addClass('class2').removeClass('class3');
+				}
+			});	
+						
+			//function fermeture info
+			$("#btn_close").click(function(){
+				$(".infodiv").hide();
+				$("#btn_close").hide()
+				$(".info").show();
+			})
+		</script>
+	
+	</body>
+</html>
